@@ -1,5 +1,6 @@
 import logging
 import datetime
+from ckeditor.fields import RichTextField
 
 from django.db import models
 from ej_users.models import User
@@ -11,7 +12,7 @@ def mission_directory_path(instance, filename):
 class Mission(models.Model):
 
     title = models.CharField(max_length=100)
-    description = models.TextField(max_length=1000)
+    description = RichTextField(max_length=1000)
     reward = models.TextField(max_length=1000, null=True)
     #who is doing the mission
     users = models.ManyToManyField(User, blank=True)
