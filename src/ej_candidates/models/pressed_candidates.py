@@ -1,7 +1,7 @@
 from django.db import models
 from ej_users.models import User
 from .candidate import Candidate
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from ej_messages.models import Message
 from ej_channels.models import Channel
@@ -20,6 +20,13 @@ class PressedCandidate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=True)
     unique_together = (("user", "candidate"),)
+
+@receiver(pre_save, sender=PressedCandidate)
+def validate_unique_together(sender, instance, **kwargs):
+        candidates = PressedCandidate.objects.filter(candidate_id=instance.candidate.id,
+                                      user_id=instance.user.id)
+        if (len(candidates) > 0):
+            raise Exception('Candidato já pressionado')
 
 @receiver(post_save, sender=PressedCandidate)
 def send_message(sender, instance, created, **kwargs):
