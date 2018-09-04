@@ -14,3 +14,4 @@ class IgnoredCandidate(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=True)
+    unique_together = (("user", "candidate"),)

@@ -19,6 +19,7 @@ class SelectedCandidate(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=True)
+    unique_together = (("user", "candidate"),)
 
 @receiver(post_save, sender=SelectedCandidate)
 def send_message(sender, instance, created, **kwargs):
