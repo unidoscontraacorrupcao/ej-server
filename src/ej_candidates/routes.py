@@ -19,5 +19,5 @@ def total_filtered_candidates(request):
 		except:
 			return JsonResponse({'total': 0}, status=status.HTTP_200_OK)
 	else:
-		total = querySet = Candidate.objects.all().count();
+		total = Candidate.objects.all().count()
 		return JsonResponse({'total': total}, status=status.HTTP_200_OK)

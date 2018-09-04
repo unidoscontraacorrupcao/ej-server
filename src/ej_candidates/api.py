@@ -68,3 +68,19 @@ def status(request, candidate):
     pressed_count = PressedCandidate.objects.filter(candidate_id=candidate).count()
     return {'status': status, 'selected_count': selected_count,
             'pressed_count': pressed_count, 'fav_count': 0}
+
+@rest_api.action('ej_users.User', methods=['get'])
+def total_filtered_candidates(request, user):
+	querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
+    	.exclude(pressedcandidate__user_id=user.id)\
+    	.exclude(ignoredcandidate__user_id=user.id)
+	filters = get_filters(request.GET)
+	if(valid_filters(filters)):
+		try:
+			total = filter_candidates(querySet, filters).count()
+			return {'total': total}
+		except:
+			return {'total': 0}
+	else:
+		total = Candidate.objects.all().count()
+		return {'total': total}
