@@ -27,9 +27,11 @@ class CandidatesConfig(AppConfig):
             if (valid_filters(filters)):
                 result = filter_candidates(querySet, filters)
                 if (result):
-                    return result.order_by("-id")[:limit]
+                    querySet = result.order_by("-id")[:limit]
+                    return Response(serializer(querySet, many=True,
+                                            context={'request': request}).data)
                 else:
-                    return []
+                    return Response([])
             else:
                 # order_by('?') randomize the querySet result.
                 # This is not the best aproach, but
