@@ -53,12 +53,13 @@ def unselect_candidate(request, user):
 @rest_api.action('ej_candidates.Candidate', methods=['get'])
 def status(request, candidate):
     status = ''
+    user = request.GET.get('user')
     try:
-        SelectedCandidate.objects.get(candidate_id=candidate)
+        SelectedCandidate.objects.get(user_id=user, candidate_id=candidate)
         status = 'selected'
     except Exception as e:
         try:
-            PressedCandidate.objects.get(candidate_id=candidate)
+            PressedCandidate.objects.get(user_id=user, candidate_id=candidate)
             status = 'pressed'
         except Exception as e:
             status = 'unselected'
