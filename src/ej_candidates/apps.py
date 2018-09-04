@@ -31,7 +31,7 @@ class CandidatesConfig(AppConfig):
                     return Response({"results": serializer(querySet, many=True,
                                             context={'request': request}).data})
                 else:
-                    return Response({"results":{}})
+                    return Response({"results":[]})
             else:
                 # order_by('?') randomize the querySet result.
                 # This is not the best aproach, but
