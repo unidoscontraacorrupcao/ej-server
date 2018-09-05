@@ -42,6 +42,22 @@ def send_message(sender, instance, created, **kwargs):
             channel.save()
         Message.objects.create(channel=channel, title="", body=title)
 
+@receiver(post_save, sender=PressedCandidate)
+def create_press_candidate_channel(sender, instance, created, **kwargs):
+    if created:
+        user = instance.user
+        candidate_urn = instance.candidate.urn
+        candidate_uf = instance.candidate.uf
+        sort = "pressed-" + str(candidate_urn) + "-" + candidate_uf
+        try:
+            channel = Channel.objects.get(sort=sort)
+            channel.users.add(user)
+            channel.save()
+        except:
+            channel = Channel.objects.create(name="candidate press channel", sort=sort)
+            channel.users.add(user)
+            channel.save()
+
 # @receiver(post_save, sender=PressedCandidate)
 # def send_press_email(sender, instance, created, **kwargs):
 #     if created:
