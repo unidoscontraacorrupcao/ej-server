@@ -48,7 +48,7 @@ def create_press_candidate_channel(sender, instance, created, **kwargs):
         user = instance.user
         candidate_urn = instance.candidate.urn
         candidate_uf = instance.candidate.uf
-        sort = "pressed-" + str(candidate_urn) + "-" + candidate_uf
+        sort = "candidate-pressed-" + str(candidate_urn) + "-" + candidate_uf
         try:
             channel = Channel.objects.get(sort=sort)
             channel.users.add(user)

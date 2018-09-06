@@ -1,6 +1,11 @@
 from django.db import models
 from model_utils import Choices
 from model_utils.fields import StatusField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from ej_messages.models import Message
+from ej_channels.models import Channel
+
 
 from boogie import rules
 from boogie.rest import rest_api
@@ -87,3 +92,30 @@ def score(object):
             or object.adhered_to_the_measures == "NÃO"):
         return 'bad'
     return 'partial'
+
+@receiver(pre_save, sender=Candidate)
+def check_candidate_status_changed(sender, instance, **kwargs):
+    try:
+        old_candidate = Candidate.objects.filter(uf=instance.uf, urn=instance.urn)[0]
+        if((old_candidate.committed_to_democracy == "SEM RESPOSTA" \
+                and instance.committed_to_democracy == "SIM") \
+                or (old_candidate.adhered_to_the_measures == "SEM RESPOSTA" \
+                and instance.adhered_to_the_measures == "SIM")):
+            send_message_to_users(old_candidate)
+    except:
+        pass
+
+def send_message_to_users(candidate):
+    #avoid circular import
+    from .pressed_candidates import PressedCandidate
+    sort = "candidate-pressed-" + str(candidate.urn) + "-" + candidate.uf
+    try:
+        channel = Channel.objects.get(sort=sort)
+        if(channel.users):
+            Message.objects.create(channel=channel, title="", body=candidate.name, target=candidate.id)
+            pressed = PressedCandidate.objects.filter(candidate=candidate)
+            channel.users.clear()
+            channel.save()
+            pressed.delete()
+    except:
+        pass
