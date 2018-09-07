@@ -64,10 +64,13 @@ def status(request, candidate):
         except Exception as e:
             status = 'unselected'
 
+    return {'status': status}
+
+@rest_api.action('ej_candidates.Candidate', methods=['get'])
+def metrics(request, candidate):
     selected_count = SelectedCandidate.objects.filter(candidate_id=candidate).count()
     pressed_count = PressedCandidate.objects.filter(candidate_id=candidate).count()
-    return {'status': status, 'selected_count': selected_count,
-            'pressed_count': pressed_count, 'fav_count': 0}
+    return {'selected_count': selected_count, 'pressed_count': pressed_count, 'fav_count': 0}
 
 @rest_api.action('ej_users.User', methods=['get'])
 def total_filtered_candidates(request, user):
