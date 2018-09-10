@@ -5,6 +5,8 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from ej_messages.models import Message
 from ej_channels.models import Channel
+from ej_profiles.models import Setting
+from push_notifications.models import GCMDevice
 
 
 from boogie import rules
@@ -111,6 +113,7 @@ def send_message_to_users(candidate):
     sort = "candidate-pressed-" + str(candidate.urn) + "-" + candidate.uf
     try:
         channel = Channel.objects.get(sort=sort)
+        send_fcm_message(channel, candidate)
         if(channel.users):
             Message.objects.create(channel=channel, title="", body=candidate.name, target=candidate.id)
             pressed = PressedCandidate.objects.filter(candidate=candidate)
@@ -119,3 +122,18 @@ def send_message_to_users(candidate):
             pressed.delete()
     except:
         pass
+
+def send_fcm_message(channel, candidate):
+    users_to_send = []
+    if(channel.users):
+        for user in channel.users.all():
+            setting = Setting.objects.get(owner_id=user.id)
+            if (setting.disapproved_notifications == True):
+                users_to_send.append(user)
+        url = "https://app.unidoscontraacorrupcao.org.br/candidate/" + str(candidate.id)
+        title = candidate.name + " se comprometeu"
+        body = "Gostaria de reavaliar como candidato?"
+        fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
+        fcm_devices.send_message("", extra={"title": title, "body": body,
+				"icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
+    
