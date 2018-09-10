@@ -16,6 +16,7 @@ from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from ej_channels.models import Channel
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -197,17 +198,16 @@ User.get_profile = get_profile
 @receiver(post_save, sender=Profile)
 def ensure_settings_created(sender, **kwargs):
     instance = kwargs.get('instance')
-    profile = instance.id
-    Setting.objects.get_or_create(profile=instance, owner_id=profile)
+    user_id = instance.user.id
+    Setting.objects.get_or_create(profile=instance, owner_id=user_id)
 
 @receiver(post_save, sender=Profile)
-def insert_user_on_channel(sender, created, **kwargs):
+def insert_user_on_general_channels(sender, created, **kwargs):
     if created:
         instance = kwargs.get('instance')
         user_id = instance.user.id
         user = User.objects.get(id=user_id)
-        channels = Channel.objects.all()[:2]
-        # TODO VERIFY USER SETTINGS BEFORE INSERT
+        channels = Channel.objects.filter(Q(sort="mission") | Q(sort="admin"))
         for channel in channels:
             channel.users.add(user)
             channel.save()
@@ -217,5 +217,21 @@ def create_user_trophy_channel(sender, instance, created, **kwargs):
     if created:
         user = instance.user
         channel = Channel.objects.create(name="trophy channel", sort="trophy", owner=user)
+        channel.users.add(user)
+        channel.save()
+
+@receiver(post_save, sender=Profile)
+def create_user_selected_channel(sender, instance, created, **kwargs):
+    if created:
+        user = instance.user
+        channel = Channel.objects.create(name="selected channel", sort="selected", owner=user)
+        channel.users.add(user)
+        channel.save()
+
+@receiver(post_save, sender=Profile)
+def create_user_press_channel(sender, instance, created, **kwargs):
+    if created:
+        user = instance.user
+        channel = Channel.objects.create(name="press channel", sort="press", owner=user)
         channel.users.add(user)
         channel.save()

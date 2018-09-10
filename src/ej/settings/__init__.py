@@ -102,6 +102,8 @@ class Conf(ThemesConf,
             }
         },
     ]
+    BOOGIE_REST_API_SCHEMA = 'https'
+
     # REST_AUTH_REGISTER_SERIALIZERS = {
     #     'REGISTER_SERIALIZER': 'ej_users.serializers.RegistrationSerializer'
     # }
@@ -111,6 +113,7 @@ class Conf(ThemesConf,
     # Required for making django debug toolbar work
     ENVIRONMENT = 'local'
     if ENVIRONMENT == 'local':
+
         INTERNAL_IPS = [*globals().get('INTERNAL_IPS', ()), '127.0.0.1']
 
         # Django CORS
@@ -130,6 +133,9 @@ class Conf(ThemesConf,
         EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
     if ENVIRONMENT == 'dev':
+        # TODO: check if this header fix the http issue.
+        SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
         INTERNAL_IPS = [*globals().get('INTERNAL_IPS', ()), '127.0.0.1']
 
         # Django CORS
@@ -162,7 +168,7 @@ class Conf(ThemesConf,
                          'admin.dev.besouro.ejplatform.org',
                          '18.222.20.172']
 
-        ACCOUNT_EMAIL_VERIFICATION = 'optional'
+        ACCOUNT_EMAIL_VERIFICATION = 'none'
         EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
         ANYMAIL = {'MAILGUN_API_KEY': ''}
         DEFAULT_FROM_EMAIL = "Unidos Contra a Corrupção <noreply@unidoscontraacorrupcao.org.br>"
@@ -200,15 +206,13 @@ class Conf(ThemesConf,
                          'admin.besouro.ejplatform.org',
                          '18.222.20.172']
 
-        ACCOUNT_EMAIL_VERIFICATION = 'optional'
+        DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+        ACCOUNT_EMAIL_VERIFICATION = 'none'
         EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
         ANYMAIL = {'MAILGUN_API_KEY': ''}
         DEFAULT_FROM_EMAIL = "Unidos Contra a Corrupção <noreply@unidoscontraacorrupcao.org.br>"
 
-
 Conf.save_settings(globals())
-
-
 #
 # Apply fixes and wait for services to start
 #

@@ -21,7 +21,8 @@ class InstalledAppsConf(Base, EjOptions):
         'ej_reports',
         'ej_users',
         'ej_missions',
-        'ej_trophies'
+        'ej_trophies',
+        'ej_candidates'
     ]
 
     third_party_apps = [
@@ -52,7 +53,8 @@ class InstalledAppsConf(Base, EjOptions):
         'pinax.badges',
         'constance',
         'constance.backends.database',
-        'ckeditor'
+        'ckeditor',
+        'push_notifications'
     ]
 
     def get_django_contrib_apps(self):

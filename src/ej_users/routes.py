@@ -1,5 +1,5 @@
 import logging
-
+import json
 from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
@@ -18,6 +18,7 @@ from ej_users.models import User
 from ej_channels.models import Channel
 from ej_notifications.models import Notification
 from .socialbuttons import social_buttons
+from push_notifications.models import APNSDevice, GCMDevice
 
 User = get_user_model()
 
@@ -163,6 +164,7 @@ def clean_cookies():
     # the client browser. Javascript can't do it itself because csrftoken was
     # previously HTTP_ONLY. This cookie needs to be js accessible to allow for
     # CSRF protection on XHR requests
+    from django.http import HttpResponse
 
     from django.http import HttpResponse
     response = HttpResponse()
@@ -181,3 +183,19 @@ def check_token(request):
 # Auxiliary functions and templates
 #
 login_extra_template = get_template('socialaccount/snippets/login_extra.html')
+
+@urlpatterns.route('create-user-device/', csrf=False)
+def create_user_device(request):
+    body = json.loads(request.body.decode("utf8"))
+    user_id = body['user_id']
+    if user_id is None:
+        raise Http404
+    user = User.objects.get(id=user_id)
+    registration_id = body['registration_id']
+    try:
+        fcm_device = GCMDevice.objects.filter(cloud_message_type="FCM", user=user)[0]
+        fcm_device.registration_id = registration_id
+        fcm_device.save()
+    except IndexError: 
+        fcm_device = GCMDevice.objects.create(registration_id=registration_id, cloud_message_type="FCM", user=user)
+    return JsonResponse({'token': fcm_device.registration_id}, status=status.HTTP_200_OK)
