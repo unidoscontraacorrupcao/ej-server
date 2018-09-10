@@ -28,12 +28,12 @@ class Candidate(models.Model):
     PARTY_OPTIONS = Choices('PT', 'PSDB')
     POLITICAL_OPTIONS = Choices('SIM', 'NÃO', 'SEM RESPOSTA')
 
-    name = models.CharField(max_length=100,
+    name = models.CharField(max_length=200,
                             help_text="The urn name of the candidate")
-    full_name = models.CharField(max_length=100,
+    full_name = models.CharField(max_length=200,
                             help_text="The full name of the candidate",
                             default="")
-    occupation  = models.CharField(max_length=100,
+    occupation  = models.CharField(max_length=200,
                                    help_text="The occupation of the candidate",
                                    default="")
 
@@ -64,19 +64,19 @@ class Candidate(models.Model):
     crowdfunding_url = models.CharField(max_length=200,
                                         help_text="The candidate crowdfunding",
                                         default="")
-    facebook_url = models.CharField(max_length=60,
+    facebook_url = models.CharField(max_length=200,
                                     help_text="The candidate facebook page",
                                     default="")
-    twitter_url = models.CharField(max_length=60,
+    twitter_url = models.CharField(max_length=200,
                                    help_text="The candidate facebook page",
                                    default="")
-    instagram_url = models.CharField(max_length=60,
+    instagram_url = models.CharField(max_length=200,
                                      help_text="The candidate instagram page",
                                      default="")
-    youtube_url = models.CharField(max_length=60,
+    youtube_url = models.CharField(max_length=200,
                                    help_text="The candidate instagram page",
                                    default="")
-    public_email = models.CharField(max_length=60,
+    public_email = models.CharField(max_length=200,
                                    help_text="The candidate public email",
                                    default="ricardo@cidadedemocratica.org.br")
 
