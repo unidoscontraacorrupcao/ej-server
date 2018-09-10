@@ -1,7 +1,7 @@
 
 def filter_by_name(querySet, filter):
     if(querySet):
-        filteredCandidates = querySet.filter(name__contains=filter.upper())
+        filteredCandidates = querySet.filter(name__contains__unaccent=filter.upper())
         if(filteredCandidates):
             return filteredCandidates
         return []
