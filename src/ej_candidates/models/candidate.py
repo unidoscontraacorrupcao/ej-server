@@ -61,7 +61,7 @@ class Candidate(models.Model):
     uf = models.CharField(max_length=2,
                           help_text="The candidate uf",
                           default="")
-    crowdfunding_url = models.CharField(max_length=60,
+    crowdfunding_url = models.CharField(max_length=200,
                                         help_text="The candidate crowdfunding",
                                         default="")
     facebook_url = models.CharField(max_length=60,
