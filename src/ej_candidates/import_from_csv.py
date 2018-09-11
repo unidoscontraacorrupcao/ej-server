@@ -51,6 +51,7 @@ class CandidatesImporter():
         adhered_to_the_measures = row[27]
         justify_adhered_to_the_measures = row[28]
         committed_to_democracy = row[29]
+        cpf = row[5]
         try:
             try:
                 # Django not trigger an pre_save or post_save event for the
@@ -76,6 +77,8 @@ class CandidatesImporter():
                 candidate.instagram_url=instagram_url
                 candidate.youtube_url=youtube_url
                 candidate.crowdfunding_url=crowdfunding_url
+                candidate.image.name = CandidatesImporter\
+                    .set_candidate_photo(candidate, cpf)
                 candidate.save()
             except Exception as e:
                 candidate = Candidate(uf=uf, candidacy=candidacy, name=name,
@@ -94,7 +97,6 @@ class CandidatesImporter():
                                     youtube_url=youtube_url,
                                     facebook_url=facebook_url,
                                     crowdfunding_url=crowdfunding_url)
-                cpf = row[5]
                 candidate.image.name = CandidatesImporter\
                     .set_candidate_photo(candidate, cpf)
                 candidate.save()
