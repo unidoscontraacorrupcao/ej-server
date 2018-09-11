@@ -1,6 +1,13 @@
 from django.db import models
 from model_utils import Choices
 from model_utils.fields import StatusField
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from ej_messages.models import Message
+from ej_channels.models import Channel
+from ej_profiles.models import Setting
+from push_notifications.models import GCMDevice
+
 
 from boogie import rules
 from boogie.rest import rest_api
@@ -56,7 +63,7 @@ class Candidate(models.Model):
     uf = models.CharField(max_length=2,
                           help_text="The candidate uf",
                           default="")
-    crowdfunding_url = models.CharField(max_length=60,
+    crowdfunding_url = models.CharField(max_length=200,
                                         help_text="The candidate crowdfunding",
                                         default="")
     facebook_url = models.CharField(max_length=200,
@@ -87,3 +94,46 @@ def score(object):
             or object.adhered_to_the_measures == "NÃO"):
         return 'bad'
     return 'partial'
+
+@receiver(pre_save, sender=Candidate)
+def check_candidate_status_changed(sender, instance, **kwargs):
+    try:
+        old_candidate = Candidate.objects.filter(uf=instance.uf, urn=instance.urn)[0]
+        if((old_candidate.committed_to_democracy == "SEM RESPOSTA" \
+                and instance.committed_to_democracy == "SIM") \
+                or (old_candidate.adhered_to_the_measures == "SEM RESPOSTA" \
+                and instance.adhered_to_the_measures == "SIM")):
+            send_message_to_users(old_candidate)
+    except:
+        pass
+
+def send_message_to_users(candidate):
+    #avoid circular import
+    from .pressed_candidates import PressedCandidate
+    sort = "candidate-pressed-" + str(candidate.urn) + "-" + candidate.uf
+    try:
+        channel = Channel.objects.get(sort=sort)
+        send_fcm_message(channel, candidate)
+        if(channel.users):
+            Message.objects.create(channel=channel, title="", body=candidate.name, target=candidate.id)
+            pressed = PressedCandidate.objects.filter(candidate=candidate)
+            channel.users.clear()
+            channel.save()
+            pressed.delete()
+    except:
+        pass
+
+def send_fcm_message(channel, candidate):
+    users_to_send = []
+    if(channel.users):
+        for user in channel.users.all():
+            setting = Setting.objects.get(owner_id=user.id)
+            if (setting.disapproved_notifications == True):
+                users_to_send.append(user)
+        url = "https://app.unidoscontraacorrupcao.org.br/candidate/" + str(candidate.id)
+        title = candidate.name + " se comprometeu"
+        body = "Gostaria de reavaliar como candidato?"
+        fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
+        fcm_devices.send_message("", extra={"title": title, "body": body,
+				"icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
+    

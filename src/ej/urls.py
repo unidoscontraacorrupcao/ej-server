@@ -56,6 +56,7 @@ urlpatterns = [
     path('api/v1/channels', include('ej_channels.urls')),
     path('api/v1/notifications', include('ej_notifications.urls')),
     path('api/v1/rocketchat/', include('ej_rocketchat.routes')),
+    path('candidates/', include('ej_candidates.routes')),
 
     # User management
     path('rest-auth/', include('rest_auth.urls')),
