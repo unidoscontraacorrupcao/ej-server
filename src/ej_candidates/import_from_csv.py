@@ -32,6 +32,7 @@ class CandidatesImporter():
         lawsuits = row[13]
         has_clean_pass = row[17]
         email_survey = row[18]
+        occupation_survey = row[19]
         if (email_tse and email_survey):
             public_email = email_survey
         else:
@@ -42,7 +43,6 @@ class CandidatesImporter():
         else:
             occupation = occupation_tse
 
-        occupation_survey = row[19]
         site_url = row[20]
         facebook_url = row[21]
         twitter_url = row[22]
