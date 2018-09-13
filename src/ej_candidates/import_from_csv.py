@@ -24,34 +24,34 @@ class CandidatesImporter():
         urn = int(row[2])
         full_name = row[3]
         name = row[4]
+        cpf = row[5]
         email_tse = row[6]
-        email_survey = row[16]
+        party = row[7]
+        occupation_tse = row[9]
+        riches = row[10]
+        lawsuits = row[13]
+        has_clean_pass = row[17]
+        email_survey = row[18]
         if (email_tse and email_survey):
             public_email = email_survey
         else:
             public_email = email_tse
-        party = row[7]
 
-        occupation_tse = row[9]
-        occupation_survey = row[17]
         if (occupation_tse and occupation_survey):
             occupation = occupation_survey
         else:
             occupation = occupation_tse
 
-        riches = row[10]
-        lawsuits = row[14]
-        site_url = row[18]
-        facebook_url = row[19]
-        twitter_url = row[20]
-        instagram_url = row[21]
-        youtube_url = row[22]
-        crowdfunding_url = row[23]
-        has_clean_pass = row[24]
-        adhered_to_the_measures = row[27]
-        justify_adhered_to_the_measures = row[28]
-        committed_to_democracy = row[29]
-        cpf = row[5]
+        occupation_survey = row[19]
+        site_url = row[20]
+        facebook_url = row[21]
+        twitter_url = row[22]
+        instagram_url = row[23]
+        youtube_url = row[24]
+        crowdfunding_url = row[25]
+        adhered_to_the_measures = row[28]
+        justify_adhered_to_the_measures = row[29]
+        committed_to_democracy = row[30]
         try:
             try:
                 # Django not trigger an pre_save or post_save event for the
