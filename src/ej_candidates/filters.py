@@ -34,6 +34,13 @@ def filter_by_adhered(querySet, filter):
             return filteredCandidates
         return []
 
+def filter_by_clean_pass(querySet, filter):
+    if(querySet):
+        filteredCandidates = querySet.filter(has_clean_pass__contains=filter)
+        if(filteredCandidates):
+            return filteredCandidates
+        return []
+
 def filter_candidates(querySet, filters):
     if(filters["filter_by_uf"]):
         querySet = filter_by_uf(querySet, filters["filter_by_uf"])
@@ -45,6 +52,8 @@ def filter_candidates(querySet, filters):
         querySet = filter_by_candidacy(querySet, filters["filter_by_candidacy"])
     if(filters["filter_by_adhered"]):
         querySet = filter_by_adhered(querySet, filters["filter_by_adhered"])
+    if(filters["filter_by_clean_pass"]):
+        querySet = filter_by_clean_pass(querySet, filters["filter_by_clean_pass"])
     return querySet
 
 def get_filters(request):
@@ -54,12 +63,13 @@ def get_filters(request):
     filters["filter_by_party"] = request.get('filter_by_party')
     filters["filter_by_candidacy"] = request.get('filter_by_candidacy')
     filters["filter_by_adhered"] = request.get('filter_by_adhered')
+    filters["filter_by_clean_pass"] = request.get('filter_by_clean_pass')
     return filters
 
 def valid_filters(filters):
     return filters["filter_by_name"] or filters["filter_by_uf"] or\
         filters["filter_by_party"] or filters["filter_by_candidacy"] or\
-        filters["filter_by_adhered"]
+        filters["filter_by_adhered"] or filters["filter_by_clean_pass"]
 
 def get_query_limit(request):
     try:
