@@ -175,10 +175,12 @@ def clean_cookies():
 @urlpatterns.get('check-token', csrf=False)
 def check_token(request):
     token_to_validate = request.META['HTTP_AUTHORIZATION'].split(' ')[1]
-    token = Token.objects.filter(key=token_to_validate)
-    if (len(token) > 0):
-        return JsonResponse({"expired": False})
-    return JsonResponse({"expired": True})
+    instance = User.objects.get(pk=request.GET.get('user_id'))
+    try:
+        token = Token.objects.get(key=token_to_validate)
+    except Exception:
+        token = Token.objects.create(user=instance)
+    return JsonResponse({"token": token.key})
 #
 # Auxiliary functions and templates
 #

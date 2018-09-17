@@ -127,6 +127,17 @@ class Conf(ThemesConf,
             'localhost:8081',
         ]
 
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'besouro-local',
+                'USER': 'besouro',
+                'PASSWORD': '',
+                'HOST': 'localhost',
+                'PORT': '5432'
+            }
+        }
+
         X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000'
 
         ACCOUNT_EMAIL_VERIFICATION = 'optional'

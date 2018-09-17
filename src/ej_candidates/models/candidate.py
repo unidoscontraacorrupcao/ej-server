@@ -136,4 +136,3 @@ def send_fcm_message(channel, candidate):
         fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
         fcm_devices.send_message("", extra={"title": title, "body": body,
 				"icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
-    
