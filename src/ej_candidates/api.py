@@ -11,13 +11,12 @@ from .filters import *
 def candidates(request, user):
     limit = get_query_limit(request)
     querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
-        .exclude(pressedcandidate__user_id=user.id)\
-        .exclude(ignoredcandidate__user_id=user.id)
+        .exclude(pressedcandidate__user_id=user.id)
     filters = get_filters(request.GET)
     if (valid_filters(filters)):
         result = filter_candidates(querySet, filters);
         if (result):
-            return result.order_by("-id")[:limit]
+            return result.order_by('?')[:limit]
         else:
             return []
     else:
@@ -74,16 +73,15 @@ def metrics(request, candidate):
 
 @rest_api.action('ej_users.User', methods=['get'])
 def total_filtered_candidates(request, user):
-    querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
-        .exclude(pressedcandidate__user_id=user.id)\
-        .exclude(ignoredcandidate__user_id=user.id)
-    filters = get_filters(request.GET)
-    if(valid_filters(filters)):
-        try:
-            total = filter_candidates(querySet, filters).count()
-            return {'total': total}
-        except:
-            return {'total': 0}
-        else:
-            total = Candidate.objects.all().count()
-            return {'total': total}
+	querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
+    	.exclude(pressedcandidate__user_id=user.id)
+	filters = get_filters(request.GET)
+	if(valid_filters(filters)):
+		try:
+			total = filter_candidates(querySet, filters).count()
+			return {'total': total}
+		except:
+			return {'total': 0}
+	else:
+		total = Candidate.objects.all().count()
+		return {'total': total}
