@@ -97,6 +97,7 @@ def export_candidates():
         spamwriter = csv.writer(csvfile, delimiter='|',
                                 quotechar='"', quoting=csv.QUOTE_MINIMAL)
         spamwriter.writerow(['id',
+            'cpf',
             'nome_urna',
             'uf',
             'passado_limpo',
@@ -113,6 +114,7 @@ def export_candidates():
                 PressedCandidate.objects.filter(candidate_id=candidate.id))))
             spamwriter.writerow([
                 candidate.id,
+                candidate.cpf,
                 candidate.name,
                 candidate.uf,
                 candidate.has_clean_pass,
