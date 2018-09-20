@@ -12,7 +12,7 @@ from .filters import *
 def candidates(request, user):
     limit = get_query_limit(request)
     querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
-        .exclude(pressedcandidate__user_id=user.id)
+        .exclude(favoritecandidate__user_id=user.id)
     filters = get_filters(request.GET)
     if (valid_filters(filters)):
         result = filter_candidates(querySet, filters);
@@ -43,8 +43,12 @@ def selected_candidates(request, user):
 
 @rest_api.action('ej_users.User')
 def total_selected_candidates(request, user):
-    querySet = Candidate.objects.filter(selectedcandidate__user_id=user.id)\
-    .exclude(favoritecandidate__user_id=user.id).count()
+    querySet = Candidate.objects.filter(selectedcandidate__user_id=user.id).count()
+    return {'total': querySet}
+
+@rest_api.action('ej_users.User')
+def total_favorite_candidates(request, user):
+    querySet = Candidate.objects.filter(favoritecandidate__user_id=user.id).count()
     return {'total': querySet}
 
 @rest_api.action('ej_users.User')
