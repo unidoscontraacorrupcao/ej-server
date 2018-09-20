@@ -81,6 +81,9 @@ class Candidate(models.Model):
     public_email = models.CharField(max_length=200,
                                    help_text="The candidate public email",
                                    default="ricardo@cidadedemocratica.org.br")
+    cpf = models.CharField(max_length=11,
+                          help_text="The candidate cpf",
+                          default='00000000000')
 
 # boogie decorator to add a property on model serializer
 @rest_api.property(Candidate)
