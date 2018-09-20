@@ -55,39 +55,39 @@ def export_users():
 
 def translate_gender(gender):
     options = {
-        0:"UNDECLARED",
-        1:"FEMALE",
-        2:"MALE",
-        3:"CIS_FEMALE",
-        4:"CIS_MALE",
-        5:"AGENDER",
-        6:"GENDERQUEER",
-        7:"GENDERFLUID",
-        8:"NON_CONFORMIST_GENDER",
-        9:"VARIANT_GENDER",
-        10:"INTERSEX",
-        11:"NON_BINARY",
-        12:"TRANSGENDERED",
-        13:"PANGENDER",
-        14:"TRANSSEXUAL_WOMAN",
-        15:"TRANSSEXUAL_MAN",
-        16:"TRANSFEMINAL",
-        17:"TRANSMASCULINE",
-        18:"DO_NOT_KNOW",
-        19:"NONE",
-        20:"OTHER"
+        0:"Não declarado",
+        1:"Feminino",
+        2:"Masculino",
+        3:"Feminino CIS",
+        4:"Masculino CIS",
+        5:"Agenero",
+        6:"Queer",
+        7:"Gênero Fluido",
+        8:"Gênero não conformista",
+        9:"Genero variante",
+        10:"Intersexo",
+        11:"Não binário",
+        12:"Transgênero",
+        13:"Pangênero",
+        14:"Transexual Mulher",
+        15:"Transexual Homem",
+        16:"Transfeminino",
+        17:"Transmasculino",
+        18:"Não sabe",
+        19:"Nenhum",
+        20:"Outros"
     }
     return options[gender]
 
 def translate_race(race):
     options = {
-        0:'Undeclared',
-        1:'Black',
-        2:'Brown',
-        3:'White',
-        4:'Yellow',
-        5:'Indigenous',
-        6:'Do not know'
+        0:'Não declarado',
+        1:'Negro',
+        2:'Pardo',
+        3:'Branco',
+        4:'Amarelo',
+        5:'Indígena',
+        6:'Não sabe'
     }
 
     return options[race]
