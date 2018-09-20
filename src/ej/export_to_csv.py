@@ -122,13 +122,13 @@ def export_candidates():
                 candidate.adhered_to_the_measures,
                 n_selecionados,
                 n_pressionados])
-            print("Candidato " + candidate.name +  " exportado")
+            print("Exported candidate " + candidate.name)
 
 def export():
     export_users()
     export_candidates()
-    print("dados dos usuários exportados em: ", USERS_CSV_FILE_PATH)
-    print("dados dos candidatos exportados em: ", CANDIDATES_CSV_FILE_PATH)
+    print("users data exported in: ", USERS_CSV_FILE_PATH)
+    print("candidates data exported in: ", CANDIDATES_CSV_FILE_PATH)
 
 if __name__ == '__main__':
     export()
