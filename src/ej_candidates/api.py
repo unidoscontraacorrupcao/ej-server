@@ -96,7 +96,8 @@ def status(request, candidate):
 def metrics(request, candidate):
     selected_count = SelectedCandidate.objects.filter(candidate_id=candidate).count()
     pressed_count = PressedCandidate.objects.filter(candidate_id=candidate).count()
-    return {'selected_count': selected_count, 'pressed_count': pressed_count, 'fav_count': 0}
+    favorite_count = FavoriteCandidate.objects.filter(candidate_id=candidate).count()
+    return {'selected_count': selected_count, 'pressed_count': pressed_count, 'fav_count': favorite_count}
 
 @rest_api.action('ej_users.User', methods=['get'])
 def total_filtered_candidates(request, user):
