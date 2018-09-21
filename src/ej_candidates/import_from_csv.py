@@ -77,6 +77,7 @@ class CandidatesImporter():
                 candidate.instagram_url=instagram_url
                 candidate.youtube_url=youtube_url
                 candidate.crowdfunding_url=crowdfunding_url
+                candidate.cpf=cpf
                 candidate.image.name = CandidatesImporter\
                     .set_candidate_photo(candidate, cpf)
                 candidate.save()
@@ -96,6 +97,7 @@ class CandidatesImporter():
                                     instagram_url=instagram_url,
                                     youtube_url=youtube_url,
                                     facebook_url=facebook_url,
+                                    cpf=cpf,
                                     crowdfunding_url=crowdfunding_url)
                 candidate.image.name = CandidatesImporter\
                     .set_candidate_photo(candidate, cpf)

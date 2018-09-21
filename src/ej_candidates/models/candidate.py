@@ -81,6 +81,9 @@ class Candidate(models.Model):
     public_email = models.CharField(max_length=200,
                                    help_text="The candidate public email",
                                    default="ricardo@cidadedemocratica.org.br")
+    cpf = models.CharField(max_length=11,
+                          help_text="The candidate cpf",
+                          default='00000000000')
 
 # boogie decorator to add a property on model serializer
 @rest_api.property(Candidate)
@@ -136,4 +139,3 @@ def send_fcm_message(channel, candidate):
         fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
         fcm_devices.send_message("", extra={"title": title, "body": body,
 				"icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
-    

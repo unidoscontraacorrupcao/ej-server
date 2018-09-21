@@ -127,6 +127,17 @@ class Conf(ThemesConf,
             'localhost:8081',
         ]
 
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'besouro-local',
+                'USER': 'besouro',
+                'PASSWORD': '',
+                'HOST': 'localhost',
+                'PORT': '5432'
+            }
+        }
+
         X_FRAME_OPTIONS = 'ALLOW-FROM http://localhost:3000'
 
         ACCOUNT_EMAIL_VERIFICATION = 'optional'
@@ -170,7 +181,7 @@ class Conf(ThemesConf,
 
         ACCOUNT_EMAIL_VERIFICATION = 'none'
         EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
-        ANYMAIL = {'MAILGUN_API_KEY': ''}
+        #ANYMAIL = {'MAILGUN_API_KEY': ''}
         DEFAULT_FROM_EMAIL = "Unidos Contra a Corrupção <noreply@unidoscontraacorrupcao.org.br>"
 
     if ENVIRONMENT == 'prod':
@@ -207,9 +218,9 @@ class Conf(ThemesConf,
                          '18.222.20.172']
 
         DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
-        ACCOUNT_EMAIL_VERIFICATION = 'none'
+        ACCOUNT_EMAIL_VERIFICATION = 'optional'
         EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
-        ANYMAIL = {'MAILGUN_API_KEY': ''}
+        #ANYMAIL = {'MAILGUN_API_KEY': ''}
         DEFAULT_FROM_EMAIL = "Unidos Contra a Corrupção <noreply@unidoscontraacorrupcao.org.br>"
 
 Conf.save_settings(globals())
