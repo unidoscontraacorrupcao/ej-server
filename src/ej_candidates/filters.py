@@ -36,7 +36,8 @@ def filter_by_adhered(querySet, filter):
 
 def filter_by_clean_pass(querySet, filter):
     if(querySet):
-        filteredCandidates = querySet.filter(has_clean_pass__contains=filter)
+        filteredCandidates = querySet.filter(has_clean_pass__in=filter.split(','))
+        print(filteredCandidates)
         if(filteredCandidates):
             return filteredCandidates
         return []
