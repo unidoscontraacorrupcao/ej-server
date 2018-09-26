@@ -65,7 +65,6 @@ def favorite_candidates(request, user):
     else:
         return querySet.order_by("-id")[:limit]
     
-
 @rest_api.action('ej_users.User', methods=['post'])
 def unselect_candidate(request, user):
     candidate = json.loads(request.body.decode("utf8"))["candidate"]
@@ -113,3 +112,13 @@ def total_filtered_candidates(request, user):
 	else:
 		total = Candidate.objects.all().count()
 		return {'total': total}
+
+@rest_api.action('ej_users.User', methods=['get'])
+def is_favorite(request, user):
+    candidate = request.query_params["candidate"]
+    try:
+        querySet = FavoriteCandidate.objects.get(candidate_id=candidate, user=user)
+        return {'is_favorite': True}
+    except:
+        return {'is_favorite': False}
+        
