@@ -124,9 +124,12 @@ def send_mission_fcm_message(sender, instance, created, **kwargs):
         channel = Channel.objects.get(sort="mission")
         users_to_send = []
         for user in channel.users.all():
-            setting = Setting.objects.get(owner_id=user.id)
-            if (setting.mission_notifications == True):
-                users_to_send.append(user)
+            try:
+                setting = Setting.objects.get(owner_id=user.id)
+                if (setting.mission_notifications == True):
+                    users_to_send.append(user)
+            except:
+                pass
         url = "https://app.unidoscontraacorrupcao.org.br/show-mission/" + str(instance.id)
         fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
         fcm_devices.send_message("", extra={"title":"Nova missão", "body": "Nova missão no ar! Vem conferir",

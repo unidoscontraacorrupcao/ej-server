@@ -40,9 +40,12 @@ def send_admin_fcm_message(sender, instance, created, **kwargs):
 		users_to_send = []
 		if channel.sort == 'admin':
 			for user in channel.users.all():
-				setting = Setting.objects.get(owner_id=user.id)
-				if (setting.admin_notifications == True):
-					users_to_send.append(user)
+				try:
+					setting = Setting.objects.get(owner_id=user.id)
+					if (setting.admin_notifications == True):
+						users_to_send.append(user)
+				except:
+					pass
 			fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
 			fcm_devices.send_message("", extra={"title": instance.title, "body": instance.body,
 				"icon":"https://i.imgur.com/D1wzP69.png", "click_action": instance.link})
@@ -56,9 +59,12 @@ def send_conversation_fcm_message(sender, instance, created, **kwargs):
 		url = "https://app.unidoscontraacorrupcao.org.br/show-mission/" + str(instance.target) + "?notification=true"
 		if "conversation" in channel.sort:
 			for user in channel.users.all():
-				setting = Setting.objects.get(owner_id=user.id)
-				if (setting.conversation_notifications == True):
-					users_to_send.append(user)
+				try:
+					setting = Setting.objects.get(owner_id=user.id)
+					if (setting.conversation_notifications == True):
+						users_to_send.append(user)
+				except:
+					pass
 			fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
 			fcm_devices.send_message("", extra={"title": instance.title, "body": instance.body,
 				"icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
