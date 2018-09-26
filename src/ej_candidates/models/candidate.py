@@ -131,9 +131,12 @@ def send_fcm_message(channel, candidate):
     users_to_send = []
     if(channel.users):
         for user in channel.users.all():
-            setting = Setting.objects.get(owner_id=user.id)
-            if (setting.disapproved_notifications == True):
-                users_to_send.append(user)
+            try:
+                setting = Setting.objects.get(owner_id=user.id)
+                if (setting.disapproved_notifications == True):
+                    users_to_send.append(user)
+            except:
+                pass
         url = "https://app.unidoscontraacorrupcao.org.br/candidate/" + str(candidate.id)
         title = candidate.name + " se comprometeu"
         body = "Gostaria de reavaliar como candidato?"
