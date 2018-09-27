@@ -11,8 +11,7 @@ from .filters import *
 @rest_api.action('ej_users.User')
 def candidates(request, user):
     limit = get_query_limit(request)
-    querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
-        .exclude(favoritecandidate__user_id=user.id)
+    querySet = Candidate.objects.exclude(favoritecandidate__user_id=user.id)
     filters = get_filters(request.GET)
     if (valid_filters(filters)):
         result = filter_candidates(querySet, filters);
