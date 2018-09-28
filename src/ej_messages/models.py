@@ -23,11 +23,11 @@ class Message(models.Model):
 
 @receiver(post_save, sender=Message)
 def generate_notifications(sender, instance, created, **kwargs):
-  create_notifications_task(instance.channel.id, instance.id, created)
+  create_notifications_task(instance, created)
 
 @receiver(post_save, sender=Message)
 def send_admin_fcm_message(sender, instance, created, **kwargs):
-  create_fcm_notifications_task(instance.channel.id, created)
+  create_fcm_notifications_task(instance, created)
 
 @receiver(post_save, sender=Message)
 def send_conversation_fcm_message(sender, instance, created, **kwargs):
