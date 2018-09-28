@@ -65,6 +65,7 @@ django-jsonfield ~= 1.0.1
 
 # Background tasks
 celery ~= 4.1.0
+django-q
 
 # Fake data
 Faker ~= 0.8.13
