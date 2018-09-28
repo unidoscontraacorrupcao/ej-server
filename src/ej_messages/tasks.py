@@ -15,7 +15,7 @@ def notification_task(channel_id, instance_id, created):
       Notification.objects.create(receiver=user,
                                   channel=channel, message=instance)
 
-def fcm_notification_task(channel_id, created):
+def fcm_notification_task(channel_id, instance_id, created):
   if created:
     from ej_messages.models import Message
     channel = Channel.objects.get(id=channel_id)
@@ -33,11 +33,12 @@ def fcm_notification_task(channel_id, created):
       fcm_devices.send_message("", extra={"title": instance.title, "body": instance.body,
                                           "icon":"https://i.imgur.com/D1wzP69.png", "click_action": instance.link})
 
-def create_notifications_task(channel_id, instance_id, created):
+def create_notifications_task(message, created):
   schedule('ej_messages.models.notification_task',
-           channel_id, instance_id, True,
+           message.channel.id, message.id, True,
            schedule_type='M', minutes=1, repeats=-1)
 
-def create_fcm_notifications_task(channel_id, created):
+def create_fcm_notifications_task(message, created):
   schedule('ej_messages.models.fcm_notification_task',
-           channel_id, created, schedule_type='M', minutes=1, repeats=-1)
+           message.channel.id, message.id, created,
+           schedule_type='M', minutes=1, repeats=-1)
