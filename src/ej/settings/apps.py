@@ -55,7 +55,8 @@ class InstalledAppsConf(Base, EjOptions):
         'constance.backends.database',
         'ckeditor',
         'push_notifications',
-        'django.contrib.postgres'
+        'django.contrib.postgres',
+        'django_q'
     ]
 
     def get_django_contrib_apps(self):
