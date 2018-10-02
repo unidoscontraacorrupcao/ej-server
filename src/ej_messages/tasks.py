@@ -1,5 +1,6 @@
 from django_q.tasks import schedule
 from push_notifications.models import APNSDevice, GCMDevice
+import time
 
 from ej_users.models import User
 from ej_channels.models import Channel
@@ -30,8 +31,24 @@ def fcm_notification_task(channel_id, instance_id, created):
           pass
       instance = Message.objects.get(pk=instance_id)
       fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
+      send_notifications_in_batches(users_to_send, instance)
+
+def send_notifications_in_batches(users, instance):
+  limit_of_devices = 1000
+  for user in range(len(users)):
+    if len(users) < limit_of_devices:
+      fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users)
       fcm_devices.send_message("", extra={"title": instance.title, "body": instance.body,
-                                          "icon":"https://i.imgur.com/D1wzP69.png", "click_action": instance.link})
+                                        "icon":"https://i.imgur.com/D1wzP69.png", "click_action": instance.link})
+      break
+    else:
+      users_to_notify = []
+      for batch_device in range(limit_of_devices):
+        devices_to_notify << users.pop(batch_device)
+      fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_notify)
+      fcm_devices.send_message("", extra={"title": instance.title, "body": instance.body,
+                                        "icon":"https://i.imgur.com/D1wzP69.png", "click_action": instance.link})
+      time.sleep(60)
 
 def create_notifications_task(message, created):
   schedule('ej_messages.models.notification_task',
