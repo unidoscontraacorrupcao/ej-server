@@ -90,7 +90,6 @@ class Candidate(models.Model):
 def score(object):
     has_clean_pass_options = ["NÂO", "CONDENADO", "RÉ", "RÉU"]
     if (object.has_clean_pass == "SIM" \
-            and object.committed_to_democracy == "SIM" \
             and object.adhered_to_the_measures == "SIM"):
         return 'good'
     if (object.has_clean_pass in has_clean_pass_options \
