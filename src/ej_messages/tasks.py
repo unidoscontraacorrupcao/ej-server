@@ -43,7 +43,7 @@ def send_notifications_in_batches(users, instance):
     else:
       users_to_notify = []
       for batch_device in range(limit_of_devices):
-        users_to_notify << users.pop()
+        users_to_notify.append(users.pop())
       fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_notify)
       fcm_devices.send_message("", extra={"title": instance.title, "body": instance.body,
                                         "icon":"https://i.imgur.com/D1wzP69.png", "click_action": instance.link})
