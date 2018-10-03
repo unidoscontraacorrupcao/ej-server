@@ -58,12 +58,14 @@ def favorite_candidates(request, user):
     if (valid_filters(filters)):
         result = filter_candidates(querySet, filters);
         if (result):
-            return result.order_by("-id")[:limit]
+            return result.order_by('?')[:limit]
         else:
             return []
     else:
-        return querySet.order_by("-id")[:limit]
-    
+        # order_by('?') randomize the querySet result.
+        # This is not the best aproach, but
+        # 9000 candidates are few data to retrieve.
+        return querySet.order_by('?')[:limit]
 @rest_api.action('ej_users.User', methods=['post'])
 def unselect_candidate(request, user):
     candidate = json.loads(request.body.decode("utf8"))["candidate"]
