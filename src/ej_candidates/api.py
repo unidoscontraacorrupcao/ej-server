@@ -101,8 +101,7 @@ def metrics(request, candidate):
 
 @rest_api.action('ej_users.User', methods=['get'])
 def total_filtered_candidates(request, user):
-	querySet = Candidate.objects.exclude(selectedcandidate__user_id=user.id)\
-    	.exclude(pressedcandidate__user_id=user.id)
+	querySet = Candidate.objects.exclude(favoritecandidate__user_id=user.id)
 	filters = get_filters(request.GET)
 	if(valid_filters(filters)):
 		try:
