@@ -47,7 +47,7 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         if not self.display_name:
-            self.display_name = random_name()
+            self.display_name = self.email;
         super().save(*args, **kwargs)
 
     class Meta:
