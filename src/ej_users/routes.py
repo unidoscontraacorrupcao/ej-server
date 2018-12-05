@@ -181,6 +181,16 @@ def check_token(request):
     except Exception:
         token = Token.objects.create(user=instance)
     return JsonResponse({"token": token.key})
+
+@urlpatterns.route('social-account-exists', csrf=False)
+def social_account_exists(request):
+    from allauth.socialaccount.models import SocialAccount
+    user_email = request.GET.get('email');
+    try:
+        SocialAccount.objects.get(user__email=user_email)
+        return JsonResponse({"account_exists": True })
+    except Exception:
+        return JsonResponse({"account_exists": False })
 #
 # Auxiliary functions and templates
 #
