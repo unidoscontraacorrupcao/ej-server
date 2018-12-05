@@ -131,7 +131,9 @@ def send_mission_fcm_message(sender, instance, created, **kwargs):
             except:
                 pass
         url = "https://app.unidoscontraacorrupcao.org.br/show-mission/" + str(instance.id)
-        fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
-        fcm_devices.send_message("", extra={"title":"Nova missão", "body": "Nova missão no ar! Vem conferir",
-            "icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
-
+        try:
+            fcm_devices = GCMDevice.objects.filter(cloud_message_type="FCM", user__in=users_to_send)
+            fcm_devices.send_message("", extra={"title":"Nova missão", "body": "Nova missão no ar! Vem conferir",
+                "icon":"https://i.imgur.com/D1wzP69.png", "click_action": url})
+        except:
+            pass
